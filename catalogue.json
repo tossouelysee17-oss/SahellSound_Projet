@@ -1,0 +1,58 @@
+[
+    {
+        "id": "ART -001",
+        "nom": "Didi B",
+        "genre": "Rap",
+        "pays": "CI",
+        "albums": [
+            {
+                "titre": "DB 1",
+                "annee": 2015,
+                "streams": 5
+            },
+            {
+                "titre": "DB 2",
+                "annee": 2017,
+                "streams": 9
+            },
+            {
+                "titre": "DB 3",
+                "annee": 2018,
+                "streams": 6
+            }
+        ]
+    },
+    {
+        "id": "002",
+        "nom": "Ninho",
+        "genre": "Rap",
+        "pays": "Congo",
+        "albums": [
+            {
+                "titre": "NI",
+                "annee": 2016,
+                "streams": 11
+            }
+        ]
+    },
+    {
+        "id": "003",
+        "nom": "Tioakola",
+        "genre": "Rap",
+        "pays": "Congo",
+        "albums": [
+            {
+                "titre": "TK 1",
+                "annee": 2018,
+                "streams": 9
+            }
+        ]
+    },
+    {
+        "id": "004",
+        "nom": "Gims",
+        "genre": "Rap",
+        "pays": "Congo",
+        "albums": []
+    }
+]
