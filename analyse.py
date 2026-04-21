@@ -3,18 +3,18 @@ import matplotlib.pyplot as plt
 
 def creer_dataframe(catalogue):
     """
-    Transforme la liste de dictionnaires (JSON) en un tableau Pandas (DataFrame).
-    On 'aplatit' les données pour avoir une ligne par album.
+    Transforme la liste de dictionnaires (JSON) en un DataFrame Pandas.
+    On 'aplatit' les données pour avoir une ligne par album (Exigence TP).
     """
     donnees_plates = []
     
     for artiste in catalogue:
-        # Si l'artiste n'a pas encore d'album, on crée quand même une ligne avec 0 streams
-        if not artiste['albums']:
+        if not artiste.get('albums'):
             donnees_plates.append({
                 "nom": artiste['nom'],
                 "genre": artiste['genre'],
                 "album": "Aucun",
+                "annee": 0,
                 "streams": 0
             })
         else:
@@ -23,25 +23,47 @@ def creer_dataframe(catalogue):
                     "nom": artiste['nom'],
                     "genre": artiste['genre'],
                     "album": album['titre'],
+                    "annee": album.get('annee', 0),
                     "streams": album['streams']
                 })
     
-    if not donnees_plates:
-        return None
-        
-    return pd.DataFrame(donnees_plates)
+    return pd.DataFrame(donnees_plates) if donnees_plates else None
+
+def filtrer_par_annee(df, annee_min):
+    """
+    Filtre les albums par année avec un MASQUE BOOLLÉEN (Point clé du TP).
+    """
+    # Création du masque booléen
+    masque = df['annee'] >= annee_min
+    return df[masque]
 
 def generer_graphique(df):
-    """Génère un graphique en barres du total des streams par artiste."""
-    # On groupe par nom d'artiste et on fait la somme des streams
+    """Génère et sauvegarde un graphique des streams par artiste."""
     stats = df.groupby('nom')['streams'].sum().sort_values(ascending=False)
     
-    # Création du graphique
     plt.figure(figsize=(10, 6))
     stats.plot(kind='bar', color='gold', edgecolor='black')
     plt.title('Popularité des Artistes (Total Streams)')
     plt.ylabel('Nombre de Streams')
-    plt.xlabel('Artistes')
     plt.xticks(rotation=45)
     plt.tight_layout()
+    
+    # Sauvegarde en PNG demandée dans l'énoncé
+    plt.savefig("graphique_streams.png")
     plt.show()
+
+def filtrer_par_annee(df, annee_limite):
+    """Filtre le DataFrame pour ne garder que les albums depuis une année précise."""
+    # Utilisation d'un masque booléen pour le filtrage
+    masque = df['annee'] >= annee_limite
+    return df[masque]
+
+def exporter_csv(df):
+    """Exporte le rapport en CSV sans perdre les accents (utf-8-sig)."""
+    try:
+        df.to_csv("rapport.csv", index=False, encoding='utf-8-sig')
+        print("✅ Rapport exporté : 'rapport.csv'")
+        return True
+    except Exception as e:
+        print(f"❌ Erreur export CSV : {e}")
+        return False

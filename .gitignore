@@ -1,0 +1,9 @@
+# Dossiers générés par Python
+__pycache__/
+*.pyc
+
+# Fichiers de configuration VS Code (optionnel)
+.vscode/
+
+# Fichiers de données temporaires ou volumineux
+*.png

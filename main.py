@@ -1,7 +1,11 @@
 import label
+import analyse
 
 def afficher_menu():
-    print("\n=== SAHELSOUND RECORDS ===")
+    """Affiche le menu principal de l'application."""
+    print("\n" + "="*25)
+    print("   SAHELSOUND RECORDS   ")
+    print("="*25)
     print("1. Consulter le catalogue")
     print("2. Ajouter un artiste")
     print("3. Ajouter un album")
@@ -9,114 +13,132 @@ def afficher_menu():
     print("5. Quitter")
 
 def main():
-    # On charge les données au démarrage
+    # Chargement initial des données
     catalogue = label.charger_catalogue()
     
     while True:
         afficher_menu()
-        choix = input("Faites votre choix (1-5) : ")
+        choix = input("\nFaites votre choix (1-5) : ").strip()
         
         if choix == "1":
             print("\n--- CONSULTATION ---")
             print("a. Lister tous les artistes")
             print("b. Rechercher un artiste")
-            sous_choix = input("Votre choix (a/b) : ").lower()
+            sous_choix = input("Votre choix (a/b) : ").lower().strip()
 
             if sous_choix == "a":
                 artistes = label.lister_artistes(catalogue)
-                print("\nListe des artistes :")
+                print("\nListe des artistes enregistrés :")
                 for a in artistes:
                     print(f"- {a['nom']} ({a['genre']}) | Pays: {a['pays']} | Albums: {a['nb_albums']}")
             
             elif sous_choix == "b":
-                critere = input("Chercher par (nom/genre) : ").lower()
-                valeur = input(f"Entrez le {critere} à rechercher : ")
-                resultats = label.rechercher_artiste(catalogue, critere, valeur)
-                
-                if resultats:
-                    for r in resultats:
-                        print(f"Trouvé : {r['nom']} - ID: {r['id']}")
+                critere = input("Chercher par (nom/genre) : ").lower().strip()
+                if critere in ["nom", "genre"]:
+                    valeur = input(f"Entrez le {critere} à rechercher : ")
+                    resultats = label.rechercher_artiste(catalogue, critere, valeur)
+                    if resultats:
+                        for r in resultats:
+                            print(f"✅ Trouvé : {r['nom']} (ID: {r['id']}) - {len(r['albums'])} album(s)")
+                    else:
+                        print("❌ Aucun artiste ne correspond à votre recherche.")
                 else:
-                    print("Aucun artiste trouvé.")
+                    print("❌ Critère invalide.")
+
         elif choix == "2":
             print("\n--- AJOUTER UN NOUVEL ARTISTE ---")
-            # 1. Collecte des informations
-            id_art = input("ID de l'artiste (ex: ART-001) : ")
-            nom = input("Nom de l'artiste : ")
-            genre = input("Genre musical : ")
-            pays = input("Pays d'origine : ")
+            id_art = input("ID de l'artiste (ex: ART-001) : ").strip()
+            nom = input("Nom de l'artiste : ").strip()
+            genre = input("Genre musical : ").strip()
+            pays = input("Pays d'origine : ").strip()
             
-            # 2. Création du dictionnaire selon la structure du sujet
             nouvel_artiste = {
                 "id": id_art,
                 "nom": nom,
                 "genre": genre,
                 "pays": pays,
-                "albums": [] # On commence avec une liste d'albums vide
+                "albums": []
             }
             
-            # 3. Appel au moteur (label.py) pour valider et enregistrer
             if label.ajouter_artiste(catalogue, nouvel_artiste):
-                print(f"L'artiste {nom} a été ajouté avec succès !")
+                print(f"✨ L'artiste {nom} a été ajouté et sauvegardé !")
             else:
-                print("L'ajout a échoué (vérifiez si l'ID existe déjà).")
+                print("⚠️ Erreur : Impossible d'ajouter l'artiste.")
+
         elif choix == "3":
             print("\n--- AJOUTER UN ALBUM ---")
-            # 1. On identifie l'artiste cible
-            id_cible = input("Entrez l'ID de l'artiste : ")
-            
-            # 2. On collecte les infos de l'album
-            titre = input("Titre de l'album : ")
-            # On convertit les entrées numériques tout de suite
+            id_cible = input("Entrez l'ID de l'artiste : ").strip()
+            titre = input("Titre de l'album : ").strip()
             try:
                 annee = int(input("Année de sortie : "))
                 streams = int(input("Nombre de streams : "))
+                
+                nouvel_album = {
+                    "titre": titre,
+                    "annee": annee,
+                    "streams": streams
+                }
+                
+                if label.ajouter_album(catalogue, id_cible, nouvel_album):
+                    print(f"💿 L'album '{titre}' a bien été rattaché à l'artiste.")
+                else:
+                    print("❌ Artiste introuvable. Vérifiez l'ID.")
             except ValueError:
-                print("Erreur : L'année et les streams doivent être des nombres !")
-                continue # On repart au menu si l'utilisateur tape n'importe quoi
-            
-            # 3. On prépare le dictionnaire de l'album
-            nouvel_album = {
-                "titre": titre,
-                "annee": annee,
-                "streams": streams
-            }
-            
-            # 4. On demande au moteur de faire la liaison
-            if label.ajouter_album(catalogue, id_cible, nouvel_album):
-                print(f"L'album '{titre}' a été ajouté au catalogue !")
-            else:
-                print("Artiste introuvable. Vérifiez l'ID.")
+                print("❌ Erreur : L'année et les streams doivent être des nombres entiers.")
 
         elif choix == "4":
-            print("\n--- ANALYSE ET STATISTIQUES ---")
-            # On importe analyse ici ou en haut du fichier
-            import analyse 
-            
-            # On transforme notre catalogue en "DataFrame" (Tableau Pandas)
             df = analyse.creer_dataframe(catalogue)
-            
             if df is not None:
-                print("\nRésumé des statistiques :")
-                # Affiche les 5 premières lignes du tableau pour vérifier
-                print(df.head()) 
-                
-                # Calcul du top artiste
-                top_artiste = df.loc[df['streams'].idxmax()]
-                print(f"\nL'artiste le plus streamé est : {top_artiste['nom']} "
-                      f"avec {top_artiste['streams']} streams !")
-                
-                # Optionnel : Générer le graphique
-                reponse = input("Voulez-vous générer le graphique des streams ? (o/n) : ")
-                if reponse.lower() == 'o':
-                    analyse.generer_graphique(df)
+                # --- CALCUL DU TOP ARTISTE PAR CUMUL TOTAL ---
+                top_serie = df.groupby('nom')['streams'].sum()
+                nom_top = top_serie.idxmax() 
+                total_streams = top_serie.max() 
+
+                print("\n" + "⭐"*10 + " TOP GLOBAL " + "⭐"*10)
+                print(f"L'artiste n°1 au cumul des streams est : {nom_top}")
+                print(f"Total catalogue : {total_streams} streams")
+                print("="*32)
+
+                while True:
+                    print("\n--- ANALYSE ET STATISTIQUES ---")
+                    print("a. Top 5 artistes (Graphique)")
+                    print("b. Moyenne des streams par genre")
+                    print("c. Filtrer par année (Masque Booléen)")
+                    print("d. Exporter le rapport CSV")
+                    print("q. Retour au menu principal")
+                    
+                    sous_choix = input("\nVotre choix (a/b/c/d/q) : ").lower().strip()
+
+                    if sous_choix == 'a':
+                        analyse.generer_graphique(df)
+                    elif sous_choix == 'b':
+                        print("\n--- MOYENNE DES STREAMS PAR GENRE ---")
+                        # On calcule la moyenne, on arrondit et on enlève les virgules
+                        moyennes = df.groupby('genre')['streams'].mean().round(0).astype(int)
+                        
+                        for genre, valeur in moyennes.items():
+                            print(f"- {genre} : {valeur:,} streams en moyenne")
+                    elif sous_choix == 'c':
+                        try:
+                            annee_min = int(input("Afficher les albums à partir de l'année : "))
+                            # Appel de la fonction corrigée
+                            df_filtre = analyse.filtrer_par_annee(df, annee_min)
+                            print(f"\n--- ALBUMS DEPUIS {annee_min} ---")
+                            print(df_filtre if not df_filtre.empty else "Aucun résultat.")
+                        except ValueError:
+                            print("❌ Année invalide.")
+                    elif sous_choix == 'd':
+                        analyse.exporter_csv(df)
+                    elif sous_choix == 'q':
+                        break
             else:
-                print("Le catalogue est vide. Pas d'analyse possible.")
+                print("⚠️ Catalogue vide ou corrompu. Analyse impossible.")
 
         elif choix == "5":
-            print("Merci d'avoir utilisé SahelSound Records. À bientôt !")
+            print("👋 Merci d'avoir utilisé SahelSound Records. À bientôt !")
             break
         else:
-            print("Choix invalide. Veuillez entrer un chiffre entre 1 et 5.")            
+            print("❌ Choix invalide (1-5 uniquement).")
+
 if __name__ == "__main__":
     main()

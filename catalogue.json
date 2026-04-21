@@ -1,58 +1,32 @@
 [
     {
-        "id": "ART -001",
+        "id": "ART-001",
         "nom": "Didi B",
         "genre": "Rap",
         "pays": "CI",
         "albums": [
-            {
-                "titre": "DB 1",
-                "annee": 2015,
-                "streams": 5
-            },
-            {
-                "titre": "DB 2",
-                "annee": 2017,
-                "streams": 9
-            },
-            {
-                "titre": "DB 3",
-                "annee": 2018,
-                "streams": 6
-            }
+            { "titre": "DB 1", "annee": 2015, "streams": 500000 },
+            { "titre": "DB 2", "annee": 2017, "streams": 900000 },
+            { "titre": "History", "annee": 2022, "streams": 1500000 }
         ]
     },
     {
-        "id": "002",
-        "nom": "Ninho",
-        "genre": "Rap",
-        "pays": "Congo",
+        "id": "ART-002",
+        "nom": "Fally Ipupa",
+        "genre": "Afrobeat",
+        "pays": "RDC",
         "albums": [
-            {
-                "titre": "NI",
-                "annee": 2016,
-                "streams": 11
-            }
+            { "titre": "Tokooos", "annee": 2017, "streams": 2500000 },
+            { "titre": "Formule 7", "annee": 2023, "streams": 3000000 }
         ]
     },
     {
-        "id": "003",
-        "nom": "Tioakola",
-        "genre": "Rap",
-        "pays": "Congo",
+        "id": "ART-003",
+        "nom": "Burna Boy",
+        "genre": "Afrobeat",
+        "pays": "Nigeria",
         "albums": [
-            {
-                "titre": "TK 1",
-                "annee": 2018,
-                "streams": 9
-            }
+            { "titre": "African Giant", "annee": 2019, "streams": 5000000 }
         ]
-    },
-    {
-        "id": "004",
-        "nom": "Gims",
-        "genre": "Rap",
-        "pays": "Congo",
-        "albums": []
     }
 ]
