@@ -61,6 +61,7 @@ def main():
             }
             
             if label.ajouter_artiste(catalogue, nouvel_artiste):
+                label.sauvegarder_catalogue(catalogue, "catalogue.json")
                 print(f"✨ L'artiste {nom} a été ajouté et sauvegardé !")
             else:
                 print("⚠️ Erreur : Impossible d'ajouter l'artiste.")
@@ -80,6 +81,7 @@ def main():
                 }
                 
                 if label.ajouter_album(catalogue, id_cible, nouvel_album):
+                    label.sauvegarder_catalogue(catalogue, "catalogue.json")
                     print(f"💿 L'album '{titre}' a bien été rattaché à l'artiste.")
                 else:
                     print("❌ Artiste introuvable. Vérifiez l'ID.")

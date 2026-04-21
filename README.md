@@ -33,9 +33,9 @@ LANCEMENT :
 > python main.py
 
 DÉVELOPPÉ PAR :
-MEHOUE Manacé
-KONOUHO Ulrich
-DOHOUNNON Landry
-ALESSI Davis
+MEHOUE Manacé,
+KONOUHO Ulrich,
+DOHOUNNON Landry,
+ALESSI Davis,
 TOSSOU Elysée
 =====================================================
