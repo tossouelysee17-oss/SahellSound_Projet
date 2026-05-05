@@ -52,12 +52,6 @@ def generer_graphique(df):
     plt.savefig("graphique_streams.png")
     plt.show()
 
-def filtrer_par_annee(df, annee_limite):
-    """Filtre le DataFrame pour ne garder que les albums depuis une année précise."""
-    # Utilisation d'un masque booléen pour le filtrage
-    masque = df['annee'] >= annee_limite
-    return df[masque]
-
 def exporter_csv(df):
     """Exporte le rapport en CSV sans perdre les accents (utf-8-sig)."""
     try:
